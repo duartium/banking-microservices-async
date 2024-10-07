@@ -1,0 +1,6 @@
+@Sofka.Microservice.Clientes_HostAddress = http://localhost:5123
+
+GET {{Sofka.Microservice.Clientes_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

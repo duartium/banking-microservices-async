@@ -1,0 +1,54 @@
+services:
+  microservice-clientes:
+    build:
+      context: ./Sofka.Microservice.Clientes
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - msqldatabase-clientes
+      - rabbitmq
+
+  microservice-cuentas:
+    build:
+      context: ./Sofka.Microservice.Cuentas
+      dockerfile: Dockerfile
+    ports:
+      - "5002:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - msqldatabase-cuentas
+      - rabbitmq
+
+  msqldatabase-clientes:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "ClientesDB*Password1"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1434:1433"  # Este servicio usará el puerto 1434 de la máquina local
+    volumes:
+      - sqlvolume-clientes:/var/opt/mssql
+
+  msqldatabase-cuentas:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "CuentasDB*Password1"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1435:1433"  # Este servicio usará el puerto 1435 de la máquina local
+    volumes:
+      - sqlvolume-cuentas:/var/opt/mssql
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  sqlvolume-clientes:
+  sqlvolume-cuentas:
