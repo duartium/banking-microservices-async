@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{385E94CB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofka.Architecture.Microservices.Common", "Sofka.Architecture.Microservices.Common\Sofka.Architecture.Microservices.Common.csproj", "{38B3F3C8-6C87-4340-8CF5-0CE64DAF1892}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sofka.Architecture.Microservices.UnitTest", "Sofka.Architecture.Microservices.UnitTest\Sofka.Architecture.Microservices.UnitTest.csproj", "{CC490DA3-A642-4956-8D7B-3E18BB899BE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,9 +36,16 @@ Global
 		{38B3F3C8-6C87-4340-8CF5-0CE64DAF1892}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38B3F3C8-6C87-4340-8CF5-0CE64DAF1892}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38B3F3C8-6C87-4340-8CF5-0CE64DAF1892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC490DA3-A642-4956-8D7B-3E18BB899BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC490DA3-A642-4956-8D7B-3E18BB899BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC490DA3-A642-4956-8D7B-3E18BB899BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC490DA3-A642-4956-8D7B-3E18BB899BE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CC490DA3-A642-4956-8D7B-3E18BB899BE7} = {385E94CB-CA0D-405F-AEBC-B4C2DA4052C9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {689B3FF1-1EBF-4E9F-BED4-FB67A8BCC4EF}
