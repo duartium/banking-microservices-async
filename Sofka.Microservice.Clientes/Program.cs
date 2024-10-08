@@ -1,6 +1,6 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Sofka.Microservice.Clientes.Clientes.Application.Queries;
 using Sofka.Microservice.Clientes.database.Context;
 using Sofka.Microservice.Clientes.DI;
 using System.Reflection;
@@ -18,6 +18,7 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddClientesMicroserviceDependencies();
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ClientesDB")));

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Moq;
+using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Application.DTOs;
 using Sofka.Microservice.Clientes.Clientes.Application.Queries;
 using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
@@ -42,5 +43,30 @@ public class ClientesTest
         Assert.NotNull(result);
         Assert.Equal(2, result.Length);
         Assert.Equal("Byron Duarte", result[0].Nombre);
+    }
+
+    [Fact]
+    public async Task CrearClienteAsync_DeberiaGuardarCliente()
+    {
+        var mockClienteRepository = new Mock<IClienteRepository>();
+
+        var command = new CrearClienteCommand
+        {
+            Nombres = "Byron Duarte",
+            Direccion = "Calle Falsa 123",
+            Telefono = "0991234567",
+            Contrasenia = "password123",
+        };
+
+        var handler = new CrearClienteCommandHandler(mockClienteRepository.Object);
+
+        await handler.Handle(command, CancellationToken.None);
+
+        mockClienteRepository.Verify(repo => repo.CrearClienteAsync(It.Is<CrearClienteCommand>(c =>
+            c.Nombres == command.Nombres &&
+            c.Direccion == command.Direccion &&
+            c.Telefono == command.Telefono &&
+            c.Contrasenia == command.Contrasenia
+        )), Times.Once);
     }
 }

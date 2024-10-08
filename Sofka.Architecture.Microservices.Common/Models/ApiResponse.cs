@@ -50,7 +50,14 @@ public class SuccessResponse<T> : ApiResponse<T>
         Success = true;
         Message = "Petición exitosa";
     }
+
+    public SuccessResponse(string message)
+    {
+        Success = true;
+        Message = "Petición exitosa";
+    }
 }
+
 
 public class ErrorResponse<T> : ApiResponse<T>
 {

@@ -29,7 +29,7 @@ services:
       SA_PASSWORD: "ClientesDB*Password1"
       ACCEPT_EULA: "Y"
     ports:
-      - "1434:1433"  # Este servicio usará el puerto 1434 de la máquina local
+      - "1434:1433" 
     volumes:
       - sqlvolume-clientes:/var/opt/mssql
 
@@ -39,7 +39,7 @@ services:
       SA_PASSWORD: "CuentasDB*Password1"
       ACCEPT_EULA: "Y"
     ports:
-      - "1435:1433"  # Este servicio usará el puerto 1435 de la máquina local
+      - "1435:1433" 
     volumes:
       - sqlvolume-cuentas:/var/opt/mssql
 

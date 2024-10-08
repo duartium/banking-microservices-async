@@ -1,27 +1,36 @@
-﻿using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
-using Sofka.Microservice.Clientes.database.Context;
+﻿using MediatR;
+using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
 
 namespace Sofka.Microservice.Clientes.Clientes.Application.Commands;
 
-public class CrearClienteCommand
+public class CrearClienteCommand : IRequest<int>
 {
-    public string Nombre { get; set; }
-    public string Identificacion { get; set; }
+    public string Nombres { get; set; } = "";
+    public string Direccion { get; set; } = "";
+    public string Telefono { get; set; } = "";
+    public string Contrasenia { get; set; } = "";
 }
 
-public class CrearClienteCommandHandler
+public class CrearClienteCommandHandler : IRequestHandler<CrearClienteCommand, int>
 {
     private readonly IClienteRepository _clienteRepository;
 
-    public CrearClienteCommandHandler(IClienteRepository clienteRepository)
+    public CrearClienteCommandHandler(
+        IClienteRepository clienteRepository)
     {
         _clienteRepository = clienteRepository;
     }
 
-    public async Task HandleAsync(CrearClienteCommand command)
+    public async Task<int> Handle(CrearClienteCommand requestCrearCliente, CancellationToken cancellationToken)
     {
-        //var cliente = new Cliente(command.Nombre, command.Identificacion);
+        bool esClienteExistente = await _clienteRepository.ClienteExisteAsync(
+            requestCrearCliente.Nombres,
+            requestCrearCliente.Direccion,
+            requestCrearCliente.Telefono);
 
-        await _clienteRepository.AgregarClienteAsync(new Cliente());
+        if (esClienteExistente) throw new ApplicationException("El cliente que intenta crear ya existe");
+
+        return await _clienteRepository
+            .CrearClienteAsync(requestCrearCliente);
     }
 }
