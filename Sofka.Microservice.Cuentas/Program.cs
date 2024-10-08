@@ -4,7 +4,15 @@ using Sofka.Microservice.Cuentas.Database.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SofkaPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -15,7 +23,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors("SofkaPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

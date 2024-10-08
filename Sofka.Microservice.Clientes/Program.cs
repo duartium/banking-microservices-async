@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Sofka.Microservice.Clientes.database.Context;
+using Sofka.Microservice.Clientes.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SofkaPolicy", policy =>
+    {
+        policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+builder.Services.AddClientesMicroserviceDependencies();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("ClientesDB")));
@@ -15,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCors("SofkaPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -26,9 +36,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
