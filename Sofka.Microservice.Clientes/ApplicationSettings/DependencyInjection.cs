@@ -1,7 +1,7 @@
 ﻿using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
 using Sofka.Microservice.Clientes.Clientes.Infraestructure.Repositories;
 
-namespace Sofka.Microservice.Clientes.DI;
+namespace Sofka.Microservice.Clientes.ApplicationSettings;
 
 public static class DependencyInjection
 {
