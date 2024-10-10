@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 
-namespace Sofka.Microservice.Clientes;
+namespace Sofka.Microservice.Clientes.ApplicationSettings;
 
 [Route("api/[controller]")]
 [ApiController]

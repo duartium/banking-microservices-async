@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sofka.Microservice.Clientes.ApplicationSettings;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Application.Mappers;
 using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
