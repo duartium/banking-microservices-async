@@ -11,4 +11,5 @@ public interface IClienteRepository
         string nombres,
         string direccion,
         string telefono);
+    Task EliminarClienteAsync(int idCliente);
 }
