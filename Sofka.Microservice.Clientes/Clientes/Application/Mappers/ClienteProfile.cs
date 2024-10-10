@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Application.DTOs;
+using Sofka.Microservice.Clientes.Clientes.Domain.Models;
 using Sofka.Microservice.Clientes.database.Context;
 
 namespace Sofka.Microservice.Clientes.Clientes.Application.Mappers;
@@ -28,3 +29,27 @@ public class ClienteProfile : Profile
 
     }
 }
+
+#region Mapeos manuales personaliados para clientes
+public static class MapClientes
+{
+    public static ClienteCompleto ToClienteCompleto(Cliente clienteEntity)
+    {
+        if(clienteEntity is null || clienteEntity.Persona is null)
+            throw new ArgumentNullException(nameof(clienteEntity));
+
+        return new ClienteCompleto
+        {
+            Identificacion = clienteEntity.Persona.Identificacion,
+            Nombres = clienteEntity.Persona.Nombre,
+            Direccion = clienteEntity.Persona.Direccion,
+            Edad = clienteEntity.Persona.Edad,
+            Genero = clienteEntity.Persona.Genero,
+            Telefono = clienteEntity.Persona.Telefono,
+            Estado = clienteEntity.Estado,
+            IdCliente = clienteEntity.IdCliente,
+            IdPersona = clienteEntity.PersonaId
+        };
+    }
+}
+#endregion

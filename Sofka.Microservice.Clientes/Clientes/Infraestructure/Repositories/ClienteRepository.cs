@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
+using Sofka.Microservice.Clientes.Clientes.Application.Mappers;
 using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
+using Sofka.Microservice.Clientes.Clientes.Domain.Models;
 using Sofka.Microservice.Clientes.database.Context;
 
 namespace Sofka.Microservice.Clientes.Clientes.Infraestructure.Repositories;
@@ -24,7 +26,7 @@ public class ClienteRepository : IClienteRepository
                 {
                     Nombre = clienteCommand.Nombres,
                     Direccion = clienteCommand.Direccion,
-                    Telefono = clienteCommand.Direccion,
+                    Telefono = clienteCommand.Telefono,
                     Edad = 0,
                     Genero = "",
                     Identificacion = ""
@@ -87,6 +89,36 @@ public class ClienteRepository : IClienteRepository
         clienteAEliminar.Estado = SofkaConstants.ESTADO_INACTIVO;
         _context.Update(clienteAEliminar);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<ClienteCompleto> ActualizarClienteCommandAsync(ActualizarClienteCommand clienteConCambios)
+    {
+        var cliente = await _context.Cliente
+            .Include(x => x.Persona)
+            .Where(u => u.Estado == SofkaConstants.ESTADO_ACTIVO &&
+                u.Persona.Nombre.Trim().ToUpper() == clienteConCambios.Nombres.Trim().ToUpper() &&
+                u.Persona.Direccion.Trim().ToUpper() == clienteConCambios.Direccion.Trim().ToUpper() &&
+                u.Persona.Telefono.Trim() == clienteConCambios.Telefono.Trim())
+            .FirstOrDefaultAsync();
+
+        if (cliente is null)
+            throw new KeyNotFoundException($"No se pudo encontrar al cliente {clienteConCambios.Nombres}");
+
+        cliente.Persona.Identificacion = clienteConCambios.Identificacion;
+        cliente.Persona.Nombre = clienteConCambios.Nombres;
+        cliente.Persona.Genero = clienteConCambios.Genero;
+        cliente.Persona.Direccion = clienteConCambios.Direccion;
+        cliente.Persona.Telefono = clienteConCambios.Telefono;
+        cliente.Persona.Edad = clienteConCambios.Edad;
+        cliente.Estado = SofkaConstants.ESTADO_ACTIVO;
+
+        _context.Update(cliente);
+        int filasAfectadas = await _context.SaveChangesAsync();
+
+        if (filasAfectadas == 0)
+            throw new ApplicationException("No se pudo actualizar el cliente");
+
+        return MapClientes.ToClienteCompleto(cliente);
     }
 
     private string HashContrasenia(string contrasenia)

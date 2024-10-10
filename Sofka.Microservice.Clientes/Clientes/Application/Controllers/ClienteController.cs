@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Application.DTOs;
 using Sofka.Microservice.Clientes.Clientes.Application.Queries;
+using Sofka.Microservice.Clientes.Clientes.Domain.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Sofka.Microservice.Clientes.Clientes.Application.Controllers;
@@ -52,7 +53,7 @@ public class ClienteController : BaseApiController<ClienteController>
         catch (Exception ex)
         {
             Logger.LogError(ex.ToString());
-            response.Update(false, ex.Message, "");
+            response.Update(false, ex.Message);
             return StatusCode(500, response);
         }
     }
@@ -71,10 +72,26 @@ public class ClienteController : BaseApiController<ClienteController>
         catch (Exception ex)
         {
             Logger.LogError(ex.ToString());
-            response.Update(false, ex.Message, "");
+            response.Update(false, ex.Message);
             return StatusCode(500, response);
         }
-        
-        
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> ActualizarClienteAsync([FromBody] ActualizarClienteCommand actualizarClienteCommand)
+    {
+        var response = new SuccessResponse<ClienteCompleto>("Cliente actualizado exitosamente");
+
+        try
+        {
+            response.Data = await Mediator.Send(actualizarClienteCommand);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex.ToString());
+            response.Update(false, ex.Message);
+            return StatusCode(500, response);
+        }
     }
 }

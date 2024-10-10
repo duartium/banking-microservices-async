@@ -1,4 +1,5 @@
 ﻿using Sofka.Microservice.Clientes.Clientes.Application.Commands;
+using Sofka.Microservice.Clientes.Clientes.Domain.Models;
 using Sofka.Microservice.Clientes.database.Context;
 
 namespace Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
@@ -12,4 +13,6 @@ public interface IClienteRepository
         string direccion,
         string telefono);
     Task EliminarClienteAsync(int idCliente);
+    Task<ClienteCompleto> ActualizarClienteCommandAsync(
+        ActualizarClienteCommand actualizarClienteCommand);
 }

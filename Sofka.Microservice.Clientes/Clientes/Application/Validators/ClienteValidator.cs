@@ -27,3 +27,13 @@ public class CrearClienteCommandValidator : AbstractValidator<CrearClienteComman
             .MaximumLength(50).WithMessage("La contraseña no puede tener más de 50 caracteres.");
     }
 }
+
+public class ActualizarClienteCommandValidator : AbstractValidator<ActualizarClienteCommand>
+{
+    public ActualizarClienteCommandValidator()
+    {
+        RuleFor(x => x.Identificacion)
+        .NotEmpty().WithMessage("La identificación es obligatoria.")
+        .Length(10, 13).WithMessage("La identificación debe ser de 10 caracteres (Cédula) o 13 caracteres (RUC).");
+    }
+}

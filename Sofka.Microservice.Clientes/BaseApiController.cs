@@ -52,7 +52,7 @@ public class ApiResponse<T>
     /// <summary>
     /// Actualiza las propiedades de la respuesta standard
     /// </summary>
-    public ApiResponse<T> Update(bool success, string message, T? data)
+    public ApiResponse<T> Update(bool success, string message, T? data = default)
     {
         Success = success;
         Message = message;

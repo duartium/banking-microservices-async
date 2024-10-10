@@ -1,13 +1,11 @@
 ﻿using MediatR;
 using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
+using Sofka.Microservice.Clientes.Clientes.Domain.Models;
 
 namespace Sofka.Microservice.Clientes.Clientes.Application.Commands;
 
-public class CrearClienteCommand : IRequest<int>
+public class CrearClienteCommand : ClientePersona, IRequest<int>
 {
-    public string Nombres { get; set; } = "";
-    public string Direccion { get; set; } = "";
-    public string Telefono { get; set; } = "";
     public string Contrasenia { get; set; } = "";
 }
 
