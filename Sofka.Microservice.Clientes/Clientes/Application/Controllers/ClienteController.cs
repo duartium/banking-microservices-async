@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Application.DTOs;
 using Sofka.Microservice.Clientes.Clientes.Application.Queries;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Sofka.Microservice.Clientes.Clientes.Application.Controllers;
 
@@ -53,5 +55,26 @@ public class ClienteController : BaseApiController<ClienteController>
             response.Update(false, ex.Message, "");
             return StatusCode(500, response);
         }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> EliminarClienteAsync([FromQuery] EliminarClienteCommand eliminarClienteCommand)
+    {
+        var response = new SuccessResponse<string>("Cliente eliminado exitosamente");
+
+        try
+        {
+            await Mediator.Send(eliminarClienteCommand);
+
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex.ToString());
+            response.Update(false, ex.Message, "");
+            return StatusCode(500, response);
+        }
+        
+        
     }
 }

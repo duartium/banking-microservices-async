@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Sofka.Microservice.Clientes.Clientes.Application.Commands;
 using Sofka.Microservice.Clientes.Clientes.Domain.Contracts;
 using Sofka.Microservice.Clientes.database.Context;
@@ -59,6 +58,7 @@ public class ClienteRepository : IClienteRepository
     public async Task<IEnumerable<Cliente>> ObtenerClientesAsync()
     {
         return await _context.Cliente
+            .Include(x => x.Persona)
             .Where(x => x.Estado == SofkaConstants.ESTADO_ACTIVO)
             .AsNoTracking()
             .ToArrayAsync();
@@ -75,8 +75,22 @@ public class ClienteRepository : IClienteRepository
                                u.Telefono.Trim() == telefono.Trim());
     }
 
+    public async Task EliminarClienteAsync(int idCliente)
+    {
+        var clienteAEliminar = await _context.Cliente
+            .Where(x => x.IdCliente == idCliente)
+            .FirstOrDefaultAsync();
+
+        if(clienteAEliminar is null)
+            throw new KeyNotFoundException($"El cliente con ID {idCliente} no fue encontrado.");
+
+        clienteAEliminar.Estado = SofkaConstants.ESTADO_INACTIVO;
+        _context.Update(clienteAEliminar);
+        await _context.SaveChangesAsync();
+    }
+
     private string HashContrasenia(string contrasenia)
     {
-        return BCrypt.Net.BCrypt.HashPassword(contrasenia); // Ejemplo con BCrypt
+        return BCrypt.Net.BCrypt.HashPassword(contrasenia);
     }
 }

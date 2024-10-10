@@ -43,7 +43,6 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Microservicio Cuentas v1.0");
     });
 }
-
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
