@@ -1,6 +1,10 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Sofka.Microservice.Cuentas.ApplicationSettings;
 using Sofka.Microservice.Cuentas.Database.Context;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +18,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCuentasMicroserviceDependencies();
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("CuentasDB"))); builder.Services.AddEndpointsApiExplorer();
@@ -26,8 +33,9 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
-var app = builder.Build();
 
+var app = builder.Build();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseCors("SofkaPolicy");
 if (app.Environment.IsDevelopment())
 {
